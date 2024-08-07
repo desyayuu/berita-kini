@@ -1,0 +1,64 @@
+.navbar-nav {
+    margin-left: auto;
+}
+
+.navbar.scrolled {
+    background-color: #0090FF;
+    color: white;
+}
+
+.navbar {
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    background-color: white;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar-brand {
+    margin: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    text-align: left;
+    color: inherit;
+}
+
+.nav-link {
+    margin: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+}
+
+#nav-active {
+    margin: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #0090FF;
+}
+
+.navbar-nav .nav-link:active,
+.navbar-nav .nav-link:focus {
+    color: #0090FF; 
+}
+
+.svg-icon {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+
+.navbar.scrolled .navbar-brand,
+.navbar.scrolled .nav-link {
+    color: white;
+}
+
+.navbar.scrolled .svg-icon path {
+    fill: white;
+}
+
+.img-headline{
+    border-radius: 30px;
+}
+  
