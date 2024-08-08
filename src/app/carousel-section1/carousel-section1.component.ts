@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,29 +9,15 @@ import { CommonModule } from '@angular/common';
   templateUrl: './carousel-section1.component.html',
   styleUrls: ['./carousel-section1.component.css']
 })
-export class CarouselSection1Component implements OnInit {
-  items = [
-    { title: 'Respons PSSI Soal Opsi Pindah dari GBK jika Lolos Babak 3 Kualifikasi',
-      description: 'Ketua Badan Tim Nasional (BTN) PSSI Sumardji merespons peluang Timnas Indonesia pindah dari Stadion Utama Gelora Bung Karno (GBK) apabila lolos ke putaran ketiga Kualifikasi Piala Dunia 2026.',
-      date: '08 Agustus 2024',
-      imageUrl: 'https://lh7-us.googleusercontent.com/aFBOnmLNs8sMYj2FrGFZ80j40ZmN_oNGzkpoHob8TNSPTN64zpNu7r88myxJQZ_qOSfyDR8jS5EoWnwuP9_FD4xe3VrPJDPIrtHt55csI3F1vb0Hh9XRdEYl9fyPOZOW54jRan59zWryX6w59A8t0Dg'
-    },
-    { title: '2 Respons PSSI Soal Opsi Pindah dari GBK jika Lolos Babak 3 Kualifikasi',
-      description: '2Ketua Badan Tim Nasional (BTN) PSSI Sumardji merespons peluang Timnas Indonesia pindah dari Stadion Utama Gelora Bung Karno (GBK) apabila lolos ke putaran ketiga Kualifikasi Piala Dunia 2026.',
-      date: '08 Agustus 2024',
-      imageUrl: 'https://lh7-us.googleusercontent.com/aFBOnmLNs8sMYj2FrGFZ80j40ZmN_oNGzkpoHob8TNSPTN64zpNu7r88myxJQZ_qOSfyDR8jS5EoWnwuP9_FD4xe3VrPJDPIrtHt55csI3F1vb0Hh9XRdEYl9fyPOZOW54jRan59zWryX6w59A8t0Dg'
-    },
-    { 
-      title: '3Respons PSSI Soal Opsi Pindah dari GBK jika Lolos Babak 3 Kualifikasi',
-      description: '3Ketua Badan Tim Nasional (BTN) PSSI Sumardji merespons peluang Timnas Indonesia pindah dari Stadion Utama Gelora Bung Karno (GBK) apabila lolos ke putaran ketiga Kualifikasi Piala Dunia 2026.',
-      date: '08 Agustus 2024',
-      imageUrl: 'https://lh7-us.googleusercontent.com/aFBOnmLNs8sMYj2FrGFZ80j40ZmN_oNGzkpoHob8TNSPTN64zpNu7r88myxJQZ_qOSfyDR8jS5EoWnwuP9_FD4xe3VrPJDPIrtHt55csI3F1vb0Hh9XRdEYl9fyPOZOW54jRan59zWryX6w59A8t0Dg'
-    }
-  ];
+export class CarouselSection1Component implements OnInit, OnDestroy {
+  items: any[] = [];
   currentIndex = 0;
   intervalId: any;
 
+  constructor(private http: HttpClient) { }
+
   ngOnInit() {
+    this.fetchItems();
     this.startAutoSlide();
   }
 
@@ -40,10 +27,39 @@ export class CarouselSection1Component implements OnInit {
     }
   }
 
+  fetchItems() {
+    const apiUrl = 'https://api-berita-indonesia.vercel.app/cnn/terbaru';
+    this.http.get(apiUrl).subscribe((response: any) => {
+      console.log('API Response:', response);
+      if (response.success && response.data && response.data.posts) {
+        this.items = response.data.posts.slice(0, 5).map((post: any) => ({
+          title: post.title,
+          description: post.description,
+          date: this.formatDate(post.pubDate),
+          imageUrl: post.thumbnail
+        }));
+      } else {
+        console.error('Data not found');
+      }
+    }, error => {
+      console.error('Error fetching data', error);
+    });
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const formatter = new Intl.DateTimeFormat('id-ID', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+    return formatter.format(date);
+  }
+
   startAutoSlide() {
     this.intervalId = setInterval(() => {
       this.nextSlide();
-    }, 3000); // Ganti 3000 dengan durasi yang diinginkan dalam milidetik
+    }, 3000); 
   }
 
   setCurrentIndex(index: number) {
@@ -51,10 +67,14 @@ export class CarouselSection1Component implements OnInit {
   }
 
   nextSlide() {
-    this.currentIndex = (this.currentIndex + 1) % this.items.length;
+    if (this.items.length > 0) {
+      this.currentIndex = (this.currentIndex + 1) % this.items.length;
+    }
   }
-
+  
   prevSlide() {
-    this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+    if (this.items.length > 0) {
+      this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+    }
   }
 }
