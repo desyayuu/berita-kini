@@ -10,9 +10,9 @@ import { CommonModule } from '@angular/common';
 })
 export class CarouselComponent implements OnInit, OnDestroy {
   items = [
-    { color: '#00CAA3', title: 'Petualangan Edukatif bersama Malang Mbois City Tour!', descTitle: 'Petualangan Edukatif bersama Malang Mbois City Tour!' },
-    { color: '#0090FF', title: 'Petualangan Edukatif bersama Malang Mbois City Tour!', descTitle: 'Petualangan Edukatif bersama Malang Mbois City Tour!' },
-    { color: 'blue', title: 'Petualangan Edukatif bersama Malang Mbois City Tour!', descTitle: 'Petualangan Edukatif bersama Malang Mbois City Tour!' }
+    { color: '#00CAA3', title: 'Petualangan Edukatif bersama Malang Mbois City Tour!1', descTitle: 'Petualangan Edukatif bersama Malang Mbois City Tour!' },
+    { color: '#0090FF', title: 'Petualangan Edukatif bersama Malang Mbois City Tour!2', descTitle: 'Petualangan Edukatif bersama Malang Mbois City Tour!' },
+    { color: 'blue', title: 'Petualangan Edukatif bersama Malang Mbois City Tour!3', descTitle: 'Petualangan Edukatif bersama Malang Mbois City Tour!' }
   ];
   currentIndex = 0;
   intervalId: any;
@@ -30,7 +30,7 @@ export class CarouselComponent implements OnInit, OnDestroy {
   startAutoSlide() {
     this.intervalId = setInterval(() => {
       this.nextSlide();
-    }, 3000); // Ganti 3000 dengan durasi yang diinginkan dalam milidetik
+    }, 3000);
   }
 
   setCurrentIndex(index: number) {
