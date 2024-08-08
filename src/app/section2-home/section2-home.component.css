@@ -1,6 +1,7 @@
 .section2-home {
   display: flex;
   flex-direction: column; 
+  padding-top: 100px;
 }
 
 .card-judul {

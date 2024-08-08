@@ -1,0 +1,54 @@
+
+.card {
+    border: 1px solid white;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.card-img-top {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+.card-body {
+    padding: 1rem;
+}
+
+.card-title {
+    margin-bottom: 0.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 26px;
+    text-align: left;
+    color: #333333;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: calc(26px * 3);
+}
+
+.card-date {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem; 
+}
+
+.svg{
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+.category{
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    color: #0090FF;
+}
