@@ -6,5 +6,5 @@ body {
 
 .content {
     padding: 100px;
-    min-height: 500vh;
+    min-height: max-content;
 }   

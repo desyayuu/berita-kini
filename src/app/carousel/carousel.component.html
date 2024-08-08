@@ -1,0 +1,19 @@
+<div class="carousel">
+    <div class="carousel-items">
+      <div class="carousel-item" *ngFor="let item of items; let i = index" [ngClass]="{ 'active': i === currentIndex }" [style.background-color]="item.color">
+        <div class="carousel-content">
+            <div class="text-content">
+                <div class="main-title">{{ item.title }}</div>
+                <div class="desc-title">{{ item.descTitle }}</div>
+            </div>
+            <div class="image-content">
+
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="indicators-carousel">
+      <span *ngFor="let item of items; let i = index" [ngClass]="{ 'active': i === currentIndex }" (click)="setCurrentIndex(i)"></span>
+    </div>
+  </div>
+  
