@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+type PaginationItem = number | 'ellipsis';
+
 @Component({
   selector: 'app-section3-home',
   standalone: true,
@@ -37,7 +39,6 @@ export class Section3HomeComponent implements OnInit {
     });
   }
   
-
   fetchData(): Observable<any> {
     return this.http.get('https://api-berita-indonesia.vercel.app/cnn/nasional');
   }
@@ -48,11 +49,45 @@ export class Section3HomeComponent implements OnInit {
   }
 
   goToPage(page: number) {
-    this.currentPage = page;
-    this.updateDisplayedItems();
+    if (typeof page === 'number' && page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updateDisplayedItems();
+    }
   }
 
   get totalPages(): number {
     return Math.ceil(this.items.length / this.itemsPerPage);
+  }
+
+  get totalPagesArray(): PaginationItem[] {
+    const pages: PaginationItem[] = [];
+    if (this.totalPages <= 5) {
+      for (let i = 1; i <= this.totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1, 2);
+      if (this.currentPage > 4) {
+        pages.push('ellipsis');
+      }
+      if (this.currentPage > 3 && this.currentPage < this.totalPages - 2) {
+        pages.push(this.currentPage - 1, this.currentPage, this.currentPage + 1);
+      } else if (this.currentPage <= 3) {
+        pages.push(3, 4);
+      }
+      if (this.currentPage < this.totalPages - 3) {
+        pages.push('ellipsis');
+      }
+      pages.push(this.totalPages - 1, this.totalPages);
+    }
+    return pages;
+  }
+
+  getShowingStart(): number {
+    return (this.currentPage - 1) * this.itemsPerPage + 1;
+  }
+
+  getShowingEnd(): number {
+    return Math.min(this.currentPage * this.itemsPerPage, this.items.length);
   }
 }
