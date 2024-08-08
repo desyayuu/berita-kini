@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CardSection3Component } from '../card-section3/card-section3.component';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 type PaginationItem = number | 'ellipsis';
 
@@ -18,12 +19,14 @@ export class Section3HomeComponent implements OnInit {
   displayedItems: any[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 8;
+  searchQuery: string = '';
+  filteredItems: any[] = [];
+  private searchTerms = new Subject<string>();
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.fetchData().subscribe((data: any) => {
-      console.log('API Response:', data); 
       if (data && data.data) {
         this.items = data.data.posts.map((item: any) => ({
           title: item.title,
@@ -34,8 +37,17 @@ export class Section3HomeComponent implements OnInit {
             year: 'numeric'
           })
         }));
+        this.filteredItems = this.items;
         this.updateDisplayedItems();
       }
+    });
+
+    this.searchTerms.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.searchQuery = term;
+      this.applyFilter();
     });
   }
   
@@ -43,20 +55,32 @@ export class Section3HomeComponent implements OnInit {
     return this.http.get('https://api-berita-indonesia.vercel.app/cnn/nasional');
   }
 
+  applyFilter() {
+    if (this.searchQuery) {
+      this.filteredItems = this.items.filter(item =>
+        item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    } else {
+      this.filteredItems = this.items;
+    }
+    this.currentPage = 1;
+    this.updateDisplayedItems();
+  }
+
   updateDisplayedItems() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    this.displayedItems = this.items.slice(startIndex, startIndex + this.itemsPerPage);
+    this.displayedItems = this.filteredItems.slice(startIndex, startIndex + this.itemsPerPage);
   }
 
   goToPage(page: number) {
-    if (typeof page === 'number' && page >= 1 && page <= this.totalPages) {
+    if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
       this.updateDisplayedItems();
     }
   }
 
   get totalPages(): number {
-    return Math.ceil(this.items.length / this.itemsPerPage);
+    return Math.ceil(this.filteredItems.length / this.itemsPerPage);
   }
 
   get totalPagesArray(): PaginationItem[] {
@@ -88,6 +112,11 @@ export class Section3HomeComponent implements OnInit {
   }
 
   getShowingEnd(): number {
-    return Math.min(this.currentPage * this.itemsPerPage, this.items.length);
+    return Math.min(this.currentPage * this.itemsPerPage, this.filteredItems.length);
+  }
+
+  onSearchChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.searchTerms.next(input.value);
   }
 }
