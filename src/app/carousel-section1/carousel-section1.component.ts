@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-carousel-section1',
@@ -14,7 +15,7 @@ export class CarouselSection1Component implements OnInit, OnDestroy {
   currentIndex = 0;
   intervalId: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit() {
     this.fetchItems();
@@ -33,6 +34,7 @@ export class CarouselSection1Component implements OnInit, OnDestroy {
       console.log('API Response:', response);
       if (response.success && response.data && response.data.posts) {
         this.items = response.data.posts.slice(0, 5).map((post: any) => ({
+          link: post.link, 
           title: post.title,
           description: post.description,
           date: this.formatDate(post.pubDate),
@@ -76,5 +78,9 @@ export class CarouselSection1Component implements OnInit, OnDestroy {
     if (this.items.length > 0) {
       this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
     }
+  }
+
+  navigateToDetail(link: string) {
+    this.router.navigate(['/detailberita'], { queryParams: { link } });
   }
 }

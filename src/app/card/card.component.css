@@ -3,6 +3,7 @@
   border-radius: 8px;
   width: 100%;
   box-sizing: border-box;
+  padding-top: 25px;
 }
 
 .space-text {
@@ -57,6 +58,9 @@
 
 .card-content td {
   padding: 4px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .card-content tr:last-child {
@@ -65,7 +69,6 @@
 }
 
 .card-content td[colspan="2"] {
-  padding-bottom: 8px;
   font-weight: bold;
 }
 
@@ -73,7 +76,6 @@
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 600;
-  line-height: var(--textlineheightl);
   text-align: left;
   color: #0090FF;
 }

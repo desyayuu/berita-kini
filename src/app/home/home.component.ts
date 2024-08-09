@@ -4,6 +4,7 @@ import { Section2HomeComponent } from '../section2-home/section2-home.component'
 import { Section3HomeComponent } from '../section3-home/section3-home.component';
 import { Section4HomeComponent } from '../section4-home/section4-home.component';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -13,4 +14,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  private baseUrl = 'https://api-berita-indonesia.vercel.app/cnn/'; 
+
+  constructor(private http: HttpClient){}
+
 }
